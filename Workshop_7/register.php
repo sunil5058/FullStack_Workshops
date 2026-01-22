@@ -1,24 +1,23 @@
 <?php
 require 'db.php';
+$theme = $_COOKIE['theme'] ?? 'light';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $student_id = $_POST['student_id'];
     $name = $_POST['name'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-    $sql = "INSERT INTO students (student_id, name, password)
-            VALUES (:student_id, :name, :password)";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $pdo->prepare(
+        "INSERT INTO students (student_id, name, password)
+         VALUES (:student_id, :name, :password)"
+    );
 
     try {
         $stmt->execute([
             ':student_id' => $student_id,
             ':name' => $name,
-            ':password' => $hashedPassword
+            ':password' => $password
         ]);
-
         header("Location: login.php");
         exit();
     } catch (PDOException $e) {
@@ -27,9 +26,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="<?= $theme ?>">
+<div class="container">
+<h2>Register</h2>
 <form method="POST">
-    <input name="student_id" placeholder="Student ID" required><br><br>
-    <input name="name" placeholder="Name" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="name" placeholder="Name" required>
+    <input type="password" name="password" placeholder="Password" required>
     <button type="submit">Register</button>
 </form>
+</div>
+</body>
+</html>
