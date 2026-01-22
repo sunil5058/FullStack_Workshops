@@ -1,0 +1,17 @@
+{
+    "name": "sunil/workshop_8",
+    "autoload": {
+        "psr-4": {
+            "Sunil\\Workshop8\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sunil-shrestha",
+            "email": "sunilshrestha2061@gmail.com"
+        }
+    ],
+    "require": {
+        "jenssegers/blade": "^2.0"
+    }
+}
